@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace WorkingCode\CountSum\Command;
+
+use WorkingCode\CountSum\Log\LoggerInterface;
+use WorkingCode\CountSum\Service\CountSumServiceInterface;
+use Throwable;
+
+readonly class CountSumCommand implements CommandInterface
+{
+    public function __construct(
+        private CountSumServiceInterface $countSumService,
+        private LoggerInterface $logger,
+        private string $dirPath,
+    ) {
+    }
+
+    public function execute(): int
+    {
+        $this->logger->info(sprintf('start command %s', self::class));
+
+        try {
+            $sumTotalByFilesInDir = $this->countSumService->calculateCountSumByDirTree($this->dirPath);
+
+            printf(
+                "sum of numbers from 'count' files across the directory tree %s: %.2f\n",
+                $this->dirPath,
+                $sumTotalByFilesInDir
+            );
+        } catch (Throwable $throwable) {
+            $this->logger->error($throwable->getMessage());
+
+            return self::FAILURE;
+        } finally {
+            $this->logger->info(sprintf('end command %s', self::class));
+        }
+
+        return self::SUCCESS;
+    }
+}
