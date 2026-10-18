@@ -44,8 +44,14 @@ docker compose run --rm application composer <script>
 
 | Command | Description |
 |---|---|
-| `docker compose run --rm application composer test` | run PHPUnit test suite |
+| `docker compose run --rm --cap-drop=DAC_OVERRIDE --user "$(id -u):$(id -g)" application composer test` | run PHPUnit test suite |
 | `docker compose run --rm application composer php-cs-fixer-diff` | show code-style violations (dry run, with diff) |
 | `docker compose run --rm application composer php-cs-fixer-fix` | fix code style automatically |
 | `docker compose run --rm application composer phpstan-full-scan` | run PHPStan static analysis (level 8) on `src/` |
-| `docker compose run --rm application composer lint` | run cs-fixer + PHPStan + tests in one command |
+| `docker compose run --rm --cap-drop=DAC_OVERRIDE --user "$(id -u):$(id -g)" application composer lint` | run cs-fixer + PHPStan + tests in one command |
+
+### Make
+```bash
+make test
+make lint
+```
