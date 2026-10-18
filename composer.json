@@ -22,9 +22,20 @@
     },
     "scripts": {
         "setup": "composer install --no-interaction",
+        "tools:install": "composer install --working-dir=tools/php-cs-fixer --no-interaction",
         "test": [
             "@setup",
             "phpunit"
+        ],
+        "php-cs-fixer-diff": [
+            "@setup",
+            "@tools:install",
+            "php -d memory_limit=-1 tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=tools/php-cs-fixer/.php-cs-fixer.dist.php --dry-run --diff"
+        ],
+        "php-cs-fixer-fix": [
+            "@setup",
+            "@tools:install",
+            "php -d memory_limit=-1 tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=tools/php-cs-fixer/.php-cs-fixer.dist.php"
         ]
     }
 }

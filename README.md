@@ -44,3 +44,5 @@ docker compose run --rm application composer <script>
 | Command | Description |
 |---|---|
 | `docker compose run --rm application composer test` | run PHPUnit test suite |
+| `docker compose run --rm application composer php-cs-fixer-diff` | show code-style violations (dry run, with diff) |
+| `docker compose run --rm application composer php-cs-fixer-fix` | fix code style automatically |
