@@ -46,3 +46,5 @@ docker compose run --rm application composer <script>
 | `docker compose run --rm application composer test` | run PHPUnit test suite |
 | `docker compose run --rm application composer php-cs-fixer-diff` | show code-style violations (dry run, with diff) |
 | `docker compose run --rm application composer php-cs-fixer-fix` | fix code style automatically |
+| `docker compose run --rm application composer phpstan-full-scan` | run PHPStan static analysis (level 8) on `src/` |
+| `docker compose run --rm application composer lint` | run cs-fixer + PHPStan + tests in one command |
