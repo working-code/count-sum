@@ -8,5 +8,8 @@ use WorkingCode\CountSum\DTO\FindFilesDTO;
 
 interface FileWalkerInterface
 {
+    /**
+     * @return iterable<string>
+     */
     public function findFilesBy(FindFilesDTO $criteria): iterable;
 }

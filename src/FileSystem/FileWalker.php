@@ -23,13 +23,9 @@ class FileWalker implements FileWalkerInterface
     {
         $this->checkExistDir($criteria->dirPath);
 
-        $dirPath = realpath($criteria->dirPath);
+        $dirPath = realpath($criteria->dirPath) ?: $criteria->dirPath;
         $searchList = [$dirPath];
-        $seenList = [];
-
-        if ($dirPath !== false) {
-            $seenList[$dirPath] = true;
-        }
+        $seenList[$dirPath] = true;
 
         while ($searchList !== []) {
             $dir = array_pop($searchList);

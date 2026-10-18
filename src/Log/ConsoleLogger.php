@@ -6,7 +6,7 @@ namespace WorkingCode\CountSum\Log;
 
 class ConsoleLogger implements LoggerInterface
 {
-    /** @var false|resource */
+    /** @var resource */
     private mixed $stream = STDERR;
 
     public function info(string $message): void
