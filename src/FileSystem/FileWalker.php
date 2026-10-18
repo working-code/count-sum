@@ -12,13 +12,12 @@ class FileWalker implements FileWalkerInterface
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     /**
      * @return iterable<string>
-     * @throws DirNotFoundException
      *
+     * @throws DirNotFoundException
      */
     public function findFilesBy(FindFilesDTO $criteria): iterable
     {

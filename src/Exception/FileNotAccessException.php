@@ -6,6 +6,4 @@ namespace WorkingCode\CountSum\Exception;
 
 use Exception;
 
-class FileNotAccessException extends Exception
-{
-}
+class FileNotAccessException extends Exception {}

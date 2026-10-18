@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WorkingCode\CountSum\Command;
 
+use Throwable;
 use WorkingCode\CountSum\Log\LoggerInterface;
 use WorkingCode\CountSum\Service\CountSumServiceInterface;
-use Throwable;
 
 readonly class CountSumCommand implements CommandInterface
 {
@@ -14,8 +14,7 @@ readonly class CountSumCommand implements CommandInterface
         private CountSumServiceInterface $countSumService,
         private LoggerInterface $logger,
         private string $dirPath,
-    ) {
-    }
+    ) {}
 
     public function execute(): int
     {

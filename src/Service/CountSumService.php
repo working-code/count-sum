@@ -18,8 +18,7 @@ class CountSumService implements CountSumServiceInterface
         private readonly FileWalkerInterface $fileWalker,
         private readonly FileReaderInterface $fileReader,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function calculateCountSumByDirTree(string $dirPath): float
     {
