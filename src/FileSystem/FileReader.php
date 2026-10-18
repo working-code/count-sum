@@ -10,11 +10,12 @@ class FileReader implements FileReaderInterface
 {
     /**
      * @return iterable<string>
+     *
      * @throws FileNotAccessException
      */
     public function getLines(string $filePath): iterable
     {
-        $fileHandle = fopen($filePath, 'r');
+        $fileHandle = @fopen($filePath, 'r');
 
         if ($fileHandle === false) {
             throw new FileNotAccessException(sprintf("Unable to open file '%s'", $filePath));

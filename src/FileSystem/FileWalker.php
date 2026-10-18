@@ -8,29 +8,23 @@ use WorkingCode\CountSum\DTO\FindFilesDTO;
 use WorkingCode\CountSum\Exception\DirNotFoundException;
 use WorkingCode\CountSum\Log\LoggerInterface;
 
-class FileWalker implements FileWalkerInterface
+readonly class FileWalker implements FileWalkerInterface
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {
-    }
+        private LoggerInterface $logger,
+    ) {}
 
     /**
      * @return iterable<string>
-     * @throws DirNotFoundException
      *
+     * @throws DirNotFoundException
      */
     public function findFilesBy(FindFilesDTO $criteria): iterable
     {
         $this->checkExistDir($criteria->dirPath);
 
-        $dirPath = realpath($criteria->dirPath);
+        $dirPath = realpath($criteria->dirPath) ?: $criteria->dirPath;
         $searchList = [$dirPath];
-        $seenList = [];
-
-        if ($dirPath !== false) {
-            $seenList[$dirPath] = true;
-        }
 
         while ($searchList !== []) {
             $dir = array_pop($searchList);
@@ -59,16 +53,6 @@ class FileWalker implements FileWalkerInterface
                     }
 
                     if (is_dir($path)) {
-                        $realPath = realpath($path);
-
-                        if ($realPath !== false && isset($seenList[$realPath])) {
-                            continue;
-                        }
-
-                        if ($realPath !== false) {
-                            $seenList[$realPath] = true;
-                        }
-
                         $searchList[] = $path;
                     } elseif ($file === $criteria->fileName && is_file($path)) {
                         yield $path;

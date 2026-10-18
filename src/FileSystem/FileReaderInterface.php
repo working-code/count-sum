@@ -10,6 +10,7 @@ interface FileReaderInterface
 {
     /**
      * @return iterable<string>
+     *
      * @throws FileNotAccessException
      */
     public function getLines(string $filePath): iterable;

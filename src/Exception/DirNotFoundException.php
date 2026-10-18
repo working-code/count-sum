@@ -6,6 +6,4 @@ namespace WorkingCode\CountSum\Exception;
 
 use Exception;
 
-class DirNotFoundException extends Exception
-{
-}
+class DirNotFoundException extends Exception {}
