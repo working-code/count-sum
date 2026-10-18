@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WorkingCode\CountSum\Service;
 
+use WorkingCode\CountSum\DTO\CountSumResultDTO;
 use WorkingCode\CountSum\DTO\FindFilesDTO;
 use WorkingCode\CountSum\Exception\FileNotAccessException;
 use WorkingCode\CountSum\FileSystem\FileReaderInterface;
@@ -14,37 +15,57 @@ class CountSumService implements CountSumServiceInterface
 {
     private const string FILE_NAME = 'count';
 
+    private const string NUMBER_PATTERN = '/^[+-]?\d+(?:[.,]\d+)?$/';
+
     public function __construct(
         private readonly FileWalkerInterface $fileWalker,
         private readonly FileReaderInterface $fileReader,
         private readonly LoggerInterface $logger,
     ) {}
 
-    public function calculateCountSumByDirTree(string $dirPath): float
+    public function calculateCountSumByDirTree(string $dirPath): CountSumResultDTO
     {
         $sumTotal = 0;
+        $skippedFiles = [];
 
         foreach ($this->fileWalker->findFilesBy(new FindFilesDTO(self::FILE_NAME, $dirPath)) as $file) {
-            $sumTotal += $this->calculateCountSumByFile($file);
+            try {
+                $sumTotal += $this->calculateCountSumByFile($file);
+            } catch (FileNotAccessException $exception) {
+                $this->logger->error($exception->getMessage());
+
+                $skippedFiles[] = $file;
+            }
         }
 
-        return $sumTotal;
+        return new CountSumResultDTO($sumTotal, $skippedFiles);
     }
 
+    /**
+     * @throws FileNotAccessException
+     */
     private function calculateCountSumByFile(string $filePath): float
     {
-        $sumTotalByFile = 0;
+        $sumTotalByFile = 0.0;
 
-        try {
-            foreach ($this->fileReader->getLines($filePath) as $line) {
-                if (preg_match_all('/-?\d+(?:[\.,]\d+)?/', $line, $matches) > 0) {
-                    foreach ($matches[0] as $number) {
-                        $sumTotalByFile += (float) $number;
-                    }
-                }
+        foreach ($this->fileReader->getLines($filePath) as $line) {
+            $number = trim($line);
+
+            if ($number === '') {
+                continue;
             }
-        } catch (FileNotAccessException $exception) {
-            $this->logger->error($exception->getMessage());
+
+            if (preg_match(self::NUMBER_PATTERN, $number) !== 1) {
+                $this->logger->warning(sprintf(
+                    "%s: line '%s' is not a number, skipped",
+                    $filePath,
+                    $number,
+                ));
+
+                continue;
+            }
+
+            $sumTotalByFile += (float) str_replace(',', '.', $number);
         }
 
         return $sumTotalByFile;

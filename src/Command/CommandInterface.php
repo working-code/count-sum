@@ -8,6 +8,7 @@ interface CommandInterface
 {
     public const int SUCCESS = 0;
     public const int FAILURE = 1;
+    public const int PARTIAL = 2;
 
     public function execute(): int;
 }
