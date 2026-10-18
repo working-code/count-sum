@@ -33,3 +33,14 @@ php app.php /tmp/data
 |---|---|
 | 0 | Успешное завершение |
 | 1 | Ошибка |
+
+## Composer scripts (via Docker)
+All commands run inside the `application` service from `docker-compose.yml` (PHP 8.3, Composer included):
+
+```bash
+docker compose run --rm application composer <script>
+```
+
+| Command | Description |
+|---|---|
+| `docker compose run --rm application composer test` | run PHPUnit test suite |

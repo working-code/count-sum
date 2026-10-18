@@ -1,0 +1,8 @@
+services:
+  application:
+    build:
+      context: ./docker/php-cli
+    image: count-sum/php-cli
+    volumes:
+      - ./:/data/app
+    working_dir: /data/app
